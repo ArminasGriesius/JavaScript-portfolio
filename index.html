@@ -29,15 +29,28 @@
       </section>
       <section id="quiz" style="display: none" class="">
         <!-- Quiz section -->
-        <h1>Quiz</h1>
-        <h4 id="quizQuestion">does?</h4>
-        <button onclick="checkAnswer(question1.options[0])" id="option1">
-          seY
-        </button>
-        <button onclick="checkAnswer(question1.options[1])" id="option2">
-          oN
-        </button>
-        <p id="score">Your score is 0/10</p>
+        <h1>Harry Potter Quiz</h1>
+        <button id="startBtn" onclick="nextQuestion()">Start the Quiz!!</button>
+        <div id="quizSection" style="display: none">
+          <h4 id="quizQuestion">does?</h4>
+          <button
+            onclick="checkAnswer(questions[currentQuestion].options[0])"
+            id="option1"
+          ></button>
+          <button
+            onclick="checkAnswer(questions[currentQuestion].options[1])"
+            id="option2"
+          ></button>
+          <button
+            onclick="checkAnswer(questions[currentQuestion].options[2])"
+            id="option3"
+          ></button>
+          <button
+            onclick="checkAnswer(questions[currentQuestion].options[3])"
+            id="option4"
+          ></button>
+          <p id="score">Your score is 0/10</p>
+        </div>
         <!-- /Quiz section -->
       </section>
       <section id="ticTacToe" style="display: none">
