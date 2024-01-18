@@ -1,0 +1,33 @@
+.headerItems {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.headerItem {
+  color: black;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.headerItem:hover {
+  text-decoration-line: underline;
+}
+
+.middlePage {
+  max-width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer {
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footerText {
+}

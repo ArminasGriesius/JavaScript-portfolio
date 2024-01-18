@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>JavaScript portfolio</title>
+  </head>
+  <body>
+    <header>
+      <nav class="headerItems">
+        <a href="#" onclick="showSelection('quiz')" class="headerItem">Quiz</a>
+        <a href="#" onclick="showSelection('ticTacToe')" class="headerItem"
+          >Tic Tac Toe</a
+        >
+        <a href="#" onclick="showSelection('mario')" class="headerItem"
+          >Mario</a
+        >
+        <a href="#" onclick="showSelection('darKazkas')" class="headerItem"
+          >Dar kazkas</a
+        >
+      </nav>
+    </header>
+    <main class="middlePage">
+      <section id="init" style="display: block" class="">
+        <!-- Init section -->
+        <h1>Welcome to my JS portfolio</h1>
+        <!-- /Init section -->
+      </section>
+      <section id="quiz" style="display: none" class="">
+        <!-- Quiz section -->
+        <h1>Quiz</h1>
+        <h4 id="quizQuestion">does?</h4>
+        <button onclick="checkAnswer(question1.options[0])" id="option1">
+          seY
+        </button>
+        <button onclick="checkAnswer(question1.options[1])" id="option2">
+          oN
+        </button>
+        <p id="score">Your score is 0/10</p>
+        <!-- /Quiz section -->
+      </section>
+      <section id="ticTacToe" style="display: none">
+        <!-- Tic Tac Toe section -->
+        <h1>Tic Tac Toe</h1>
+        <!-- /Tic Tac Toe section -->
+      </section>
+      <section id="mario" style="display: none">
+        <!-- Mario section -->
+        <h1>Mario</h1>
+        <!-- /Mario section -->
+      </section>
+      <section id="darKazkas" style="display: none">
+        <!-- Dar kazkas section -->
+        <h1>Dar kazkas</h1>
+        <!-- /Dar kazkas section -->
+      </section>
+    </main>
+    <footer class="footer">
+      <p class="footerText">&copy; 2024 Your Page</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
