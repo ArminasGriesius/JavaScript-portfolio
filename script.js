@@ -3,6 +3,8 @@ function showSelection(section) {
     div.style.display = "none";
   });
   document.getElementById(section).style.display = "block";
+  document.querySelector(".quizSection").style.display = "grid";
+  document.querySelector(".answerList").style.display = "none";
 }
 
 // Quiz
@@ -28,7 +30,7 @@ var questions = [
   {
     question:
       "What magical creatures were let loose in Lockhart’s first lesson and hoisted Neville up into the air by his ears?",
-    options: ["Augureys", "Billywigs", "Cornish pixies", "Fairies"],
+    options: ["Augureys", "Billywigs", "Fairies", "Cornish pixies"],
     answer: "Cornish pixies",
   },
   {
@@ -85,10 +87,40 @@ var questions = [
     answer: "Thestrals",
   },
 ];
+
+var results = [
+  {
+    result: "You should at least watch the movies",
+  },
+  {
+    result: "This was not Lord of the Rings quiz, sorry",
+  },
+  {
+    result: "Not quite this time",
+  },
+  {
+    result: "Not great, not terrible",
+  },
+  {
+    result: "Not bad!!",
+  },
+  {
+    result: "Congradulations! You are a TRUE Harry Potter fan!!",
+  },
+];
+
 var currentQuestionId = "quizQuestion";
 
+document.getElementById("tryAgain").style.display = "none";
+
 function nextQuestion() {
+  document.querySelector(".answerList").style.display = "flex";
+  document.getElementById("quizSection").style.display = "block";
+  document.getElementById("tryAgain").style.display = "none";
   if (currentQuestion < questions.length) {
+    document.getElementById("questionNumber").innerText = `Question ${
+      currentQuestion + 1
+    }/10`;
     document.getElementById(currentQuestionId).innerText =
       questions[currentQuestion].question;
     document.getElementById("option1").innerText =
@@ -99,24 +131,62 @@ function nextQuestion() {
       questions[currentQuestion].options[2];
     document.getElementById("option4").innerText =
       questions[currentQuestion].options[3];
+  } else if (currentQuestion == questions.length) {
+    document.getElementById(
+      "questionNumber"
+    ).innerText = `Your score is: ${score}/10`;
+    // document.getElementById("quizSection").style.display = "none";
+    // document.getElementById("showResults").style.display = "block";
+    document.getElementById("quizQuestion").innerText =
+      results[Math.round(showText)].result;
+    console.log("results[0].result ===", results[0].result);
+    console.log("end");
+    console.log("showText ===", showText);
+    document.querySelector(".answerList").style.display = "none";
+    document.getElementById("tryAgain").style.display = "inline-block";
+    score = 0;
+    showText = 0;
+    currentQuestion = 0;
   }
   document.getElementById("startBtn").style.display = "none";
-  document.getElementById("quizSection").style.display = "block";
 }
 
 var score = 0;
+var showText = 0;
 var currentQuestion = 0;
 
 function checkAnswer(userAnswer) {
-  if (userAnswer === questions[currentQuestion].answer) {
-    alert("correct");
-    score++;
-    document.getElementById("score").innerText = `Your score is: ${score}/10`;
-  } else {
-    alert("Wrong!");
-  }
-  currentQuestion++;
-  nextQuestion(questions[currentQuestion]);
-}
+  var selectedButtons = document.querySelectorAll(".answerOption");
+  var correctAnswer = questions[currentQuestion].answer;
 
-// /Quiz
+  selectedButtons.forEach(function (button) {
+    if (button.innerText === userAnswer) {
+      if (userAnswer === correctAnswer) {
+        // alert("Correct");
+        button.style.backgroundColor = "green";
+        button.style.color = "white";
+        score++;
+        showText += 0.5;
+      } else {
+        button.style.backgroundColor = "red";
+        button.style.color = "antiquewhite";
+        // alert("Wrong!");
+      }
+    }
+  });
+
+  currentQuestion++;
+  setTimeout(function () {
+    nextQuestion(questions[currentQuestion]);
+    document.getElementById("option1").style.backgroundColor = "antiquewhite";
+    document.getElementById("option2").style.backgroundColor = "antiquewhite";
+    document.getElementById("option3").style.backgroundColor = "antiquewhite";
+    document.getElementById("option4").style.backgroundColor = "antiquewhite";
+    document.getElementById("option1").style.color = "black";
+    document.getElementById("option2").style.color = "black";
+    document.getElementById("option3").style.color = "black";
+    document.getElementById("option4").style.color = "black";
+  }, 2000);
+
+  return showText;
+}
