@@ -25,52 +25,90 @@
       <section id="init" style="display: block" class="">
         <!-- Init section -->
         <h1>Welcome to my JS portfolio</h1>
-        <!-- /Init section -->
       </section>
+      <!-- /Init section -->
+      <!-- Quiz section -->
       <section id="quiz" style="display: none" class="">
-        <!-- Quiz section -->
         <h1>Harry Potter Quiz</h1>
-        <button id="startBtn" onclick="nextQuestion()">Start the Quiz!!</button>
-        <div id="quizSection" style="display: none">
-          <h4 id="quizQuestion">does?</h4>
-          <button
-            onclick="checkAnswer(questions[currentQuestion].options[0])"
-            id="option1"
-          ></button>
-          <button
-            onclick="checkAnswer(questions[currentQuestion].options[1])"
-            id="option2"
-          ></button>
-          <button
-            onclick="checkAnswer(questions[currentQuestion].options[2])"
-            id="option3"
-          ></button>
-          <button
-            onclick="checkAnswer(questions[currentQuestion].options[3])"
-            id="option4"
-          ></button>
-          <p id="score">Your score is 0/10</p>
+        <p>
+          Answer 10 questions to determine wether you're a TRUE Harry Potter fan
+        </p>
+        <div id="quizSection" class="quizSection" style="display: none">
+          <div class="quizBothSides">
+            <div class="questionSide">
+              <p id="questionNumber" class="questionNumber">
+                Welcome to the Harry Potter quiz!
+              </p>
+              <h4 id="quizQuestion" class="question">
+                To start simply press the button below
+              </h4>
+            </div>
+            <div class="answerList">
+              <button
+                onclick="checkAnswer(questions[currentQuestion].options[0])"
+                id="option1"
+                class="answerOption"
+              >
+                Option 1
+              </button>
+              <button
+                onclick="checkAnswer(questions[currentQuestion].options[1])"
+                id="option2"
+                class="answerOption"
+              >
+                Option 2
+              </button>
+              <button
+                onclick="checkAnswer(questions[currentQuestion].options[2])"
+                id="option3"
+                class="answerOption"
+              >
+                Option 3
+              </button>
+              <button
+                onclick="checkAnswer(questions[currentQuestion].options[3])"
+                id="option4"
+                class="answerOption"
+              >
+                Option 4
+              </button>
+            </div>
+          </div>
         </div>
-        <!-- /Quiz section -->
+
+        <div>
+          <button
+            onclick="nextQuestion([0])"
+            id="tryAgain"
+            class="takeQuizButton"
+          >
+            Try again
+          </button>
+          <h2 id="showResults" style="display: none">belekas</h2>
+        </div>
+        <button id="startBtn" class="takeQuizButton" onclick="nextQuestion()">
+          Start the Quiz!!
+        </button>
       </section>
+      <!-- /Quiz section -->
+      <!-- Tic Tac Toe section -->
       <section id="ticTacToe" style="display: none">
-        <!-- Tic Tac Toe section -->
         <h1>Tic Tac Toe</h1>
-        <!-- /Tic Tac Toe section -->
       </section>
+      <!-- /Tic Tac Toe section -->
+      <!-- Mario section -->
       <section id="mario" style="display: none">
-        <!-- Mario section -->
         <h1>Mario</h1>
-        <!-- /Mario section -->
       </section>
+      <!-- /Mario section -->
+      <!-- Dar kazkas section -->
       <section id="darKazkas" style="display: none">
-        <!-- Dar kazkas section -->
         <h1>Dar kazkas</h1>
-        <!-- /Dar kazkas section -->
       </section>
+      <!-- /Dar kazkas section -->
     </main>
     <footer class="footer">
-      <p class="footerText">&copy; 2024 Your Page</p>
+      <p class="footerText">&copy; 2024 Arminas Griesius</p>
     </footer>
     <script src="script.js"></script>
   </body>
