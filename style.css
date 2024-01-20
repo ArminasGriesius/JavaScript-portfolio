@@ -119,6 +119,66 @@ h1 {
 
 /* /quiz */
 
+/* Tic Tac Toe */
+
+.ticTacToeBox {
+  width: 50%;
+  margin: 89px auto;
+  font-size: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  color: white;
+}
+
+.ticTacToeBox > div {
+  padding: 50px;
+}
+
+.topLeft {
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+}
+.topMiddle {
+  border-left: 2px solid white;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+}
+.topRight {
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+}
+
+.middleLeft {
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+}
+.middle {
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+}
+.middleRight {
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+}
+.bottomLeft {
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+}
+.bottomMiddle {
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+  border-left: 2px solid white;
+}
+.bottomRight {
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+}
+/* /Tic Tac Toe */
+
 .footer {
   /* padding: 10px; */
   border-top: 1px solid white;
