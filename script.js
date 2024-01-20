@@ -2,8 +2,21 @@ function showSelection(section) {
   document.querySelectorAll("main > section").forEach((div) => {
     div.style.display = "none";
   });
+
+  if (section === "quiz") {
+    document.getElementById(section).style.display = "block";
+
+    if (quizStarted) {
+      harryPotterTheme.play();
+    }
+  } else {
+    harryPotterTheme.pause();
+    // harryPotterTheme.currentTime = 0;
+  }
   document.getElementById(section).style.display = "block";
 }
+
+let quizStarted = false;
 
 // Quiz
 var questions = [
@@ -111,9 +124,15 @@ var currentQuestionId = "quizQuestion";
 
 let harryPotterTheme = new Audio("/files/HPTheme.mp3");
 let correct = new Audio("/files/Correct.mp3");
-correct.volume = 0.1;
+correct.volume = 0.3;
 let wrong = new Audio("/files/Wrong.mp3");
-wrong.volume = 0.1;
+wrong.volume = 0.3;
+let goodScore = new Audio("/files/GoodScore.mp3");
+goodScore.volume = 0.3;
+let badScore = new Audio("/files/BadScore.mp3");
+badScore.volume = 0.5;
+let middleScore = new Audio("/files/MiddleScore.mp3");
+middleScore.volume = 0.5;
 
 document.getElementById("tryAgain").style.display = "none";
 
@@ -124,9 +143,25 @@ function startQuizDisplay() {
   document.getElementById("quizSection").style.display = "block";
   document.getElementById("quizHeadlineText").style.display = "block";
   harryPotterTheme.play();
+  quizStarted = true;
+}
+
+function playQuizEnd() {
+  switch (true) {
+    case score <= 4:
+      badScore.play();
+      break;
+    case score > 4 && score < 7:
+      middleScore.play();
+      break;
+    default:
+      goodScore.play();
+      break;
+  }
 }
 
 function showQuizResult() {
+  playQuizEnd();
   document.querySelector(".initQuiz").style.display = "flex";
   document.getElementById("initQuizBottomText").innerText =
     results[Math.round(showText)].result;
@@ -138,6 +173,7 @@ function showQuizResult() {
   document.getElementById("tryAgain").style.display = "inline-block";
   harryPotterTheme.pause();
   harryPotterTheme.currentTime = 0;
+  quizStarted = false;
 }
 
 function resetQuizScore() {
