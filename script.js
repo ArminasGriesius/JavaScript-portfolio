@@ -109,55 +109,68 @@ var results = [
 
 var currentQuestionId = "quizQuestion";
 
+let harryPotterTheme = new Audio("/files/HPTheme.mp3");
+let correct = new Audio("/files/Correct.mp3");
+correct.volume = 0.1;
+let wrong = new Audio("/files/Wrong.mp3");
+wrong.volume = 0.1;
+
 document.getElementById("tryAgain").style.display = "none";
 
-function nextQuestion() {
+function startQuizDisplay() {
   document.querySelector(".initQuiz").style.display = "none";
-  document.querySelector(".answerList").style.display = "flex";
-  document.getElementById("quizSection").style.display = "block";
-  document.getElementById("tryAgain").style.display = "none";
-  if (currentQuestion < questions.length) {
-    document.getElementById("questionNumber").innerText = `Question ${
-      currentQuestion + 1
-    }/10`;
-    document.getElementById(currentQuestionId).innerText =
-      questions[currentQuestion].question;
-    document.getElementById("option1").innerText =
-      questions[currentQuestion].options[0];
-    document.getElementById("option2").innerText =
-      questions[currentQuestion].options[1];
-    document.getElementById("option3").innerText =
-      questions[currentQuestion].options[2];
-    document.getElementById("option4").innerText =
-      questions[currentQuestion].options[3];
-  } else if (currentQuestion == questions.length) {
-    document.getElementById(
-      "questionNumber"
-    ).innerText = `Your score is: ${score}/10`;
-    // document.getElementById("quizSection").style.display = "none";
-    // document.getElementById("showResults").style.display = "block";
-    document.getElementById("quizQuestion").innerText =
-      results[Math.round(showText)].result;
-    console.log("results[0].result ===", results[0].result);
-    console.log("end");
-    console.log("showText ===", showText);
-    document.querySelector(".initQuiz").style.display = "flex";
-
-    document.getElementById("initQuizBottomText").innerText =
-      results[Math.round(showText)].result;
-
-    document.getElementById(
-      "initQuizTopText"
-    ).innerText = `Your score is: ${score}/10`;
-    document.querySelector(".answerList").style.display = "none";
-    document.getElementById("quizSection").style.display = "none";
-    document.getElementById("quizHeadlineText").style.display = "none";
-    document.getElementById("tryAgain").style.display = "inline-block";
-    score = 0;
-    showText = 0;
-    currentQuestion = 0;
-  }
   document.getElementById("startBtn").style.display = "none";
+  document.getElementById("tryAgain").style.display = "none";
+  document.getElementById("quizSection").style.display = "block";
+  document.getElementById("quizHeadlineText").style.display = "block";
+  harryPotterTheme.play();
+}
+
+function showQuizResult() {
+  document.querySelector(".initQuiz").style.display = "flex";
+  document.getElementById("initQuizBottomText").innerText =
+    results[Math.round(showText)].result;
+  document.getElementById(
+    "initQuizTopText"
+  ).innerText = `Your score is: ${score}/10`;
+  document.getElementById("quizSection").style.display = "none";
+  document.getElementById("quizHeadlineText").style.display = "none";
+  document.getElementById("tryAgain").style.display = "inline-block";
+  harryPotterTheme.pause();
+  harryPotterTheme.currentTime = 0;
+}
+
+function resetQuizScore() {
+  score = 0;
+  showText = 0;
+  currentQuestion = 0;
+}
+
+function showQuestionsAndAnswers() {
+  document.getElementById("questionNumber").innerText = `Question ${
+    currentQuestion + 1
+  }/10`;
+  document.getElementById(currentQuestionId).innerText =
+    questions[currentQuestion].question;
+  document.getElementById("option1").innerText =
+    questions[currentQuestion].options[0];
+  document.getElementById("option2").innerText =
+    questions[currentQuestion].options[1];
+  document.getElementById("option3").innerText =
+    questions[currentQuestion].options[2];
+  document.getElementById("option4").innerText =
+    questions[currentQuestion].options[3];
+}
+
+function nextQuestion() {
+  startQuizDisplay();
+
+  if (currentQuestion < questions.length) {
+    showQuestionsAndAnswers();
+  } else if (currentQuestion == questions.length) {
+    showQuizResult();
+    resetQuizScore();
+  }
 }
 
 var score = 0;
@@ -171,15 +184,15 @@ function checkAnswer(userAnswer) {
   selectedButtons.forEach(function (button) {
     if (button.innerText === userAnswer) {
       if (userAnswer === correctAnswer) {
-        // alert("Correct");
         button.style.backgroundColor = "green";
         button.style.color = "white";
+        correct.play();
         score++;
         showText += 0.5;
       } else {
         button.style.backgroundColor = "red";
         button.style.color = "antiquewhite";
-        // alert("Wrong!");
+        wrong.play();
       }
     }
   });
