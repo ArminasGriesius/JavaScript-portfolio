@@ -3,8 +3,6 @@ function showSelection(section) {
     div.style.display = "none";
   });
   document.getElementById(section).style.display = "block";
-  document.querySelector(".quizSection").style.display = "grid";
-  document.querySelector(".answerList").style.display = "none";
 }
 
 // Quiz
@@ -114,6 +112,7 @@ var currentQuestionId = "quizQuestion";
 document.getElementById("tryAgain").style.display = "none";
 
 function nextQuestion() {
+  document.querySelector(".initQuiz").style.display = "none";
   document.querySelector(".answerList").style.display = "flex";
   document.getElementById("quizSection").style.display = "block";
   document.getElementById("tryAgain").style.display = "none";
@@ -142,7 +141,17 @@ function nextQuestion() {
     console.log("results[0].result ===", results[0].result);
     console.log("end");
     console.log("showText ===", showText);
+    document.querySelector(".initQuiz").style.display = "flex";
+
+    document.getElementById("initQuizBottomText").innerText =
+      results[Math.round(showText)].result;
+
+    document.getElementById(
+      "initQuizTopText"
+    ).innerText = `Your score is: ${score}/10`;
     document.querySelector(".answerList").style.display = "none";
+    document.getElementById("quizSection").style.display = "none";
+    document.getElementById("quizHeadlineText").style.display = "none";
     document.getElementById("tryAgain").style.display = "inline-block";
     score = 0;
     showText = 0;
@@ -186,7 +195,7 @@ function checkAnswer(userAnswer) {
     document.getElementById("option2").style.color = "black";
     document.getElementById("option3").style.color = "black";
     document.getElementById("option4").style.color = "black";
-  }, 2000);
+  }, 1500);
 
   return showText;
 }
