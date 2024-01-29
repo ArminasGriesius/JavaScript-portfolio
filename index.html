@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <script src="mario.js" defer></script>
+
     <title>JavaScript portfolio</title>
   </head>
   <body>
@@ -102,22 +105,42 @@
       <!-- Tic Tac Toe section -->
       <section id="ticTacToe" style="display: none">
         <h1>Tic Tac Toe</h1>
-        <div class="ticTacToeBox">
-          <div class="topLeft">X</div>
-          <div class="topMiddle">X</div>
-          <div class="topRight">X</div>
-          <div class="middleLeft">X</div>
-          <div class="middle">X</div>
-          <div class="middleRight">X</div>
-          <div class="bottomLeft">X</div>
-          <div class="bottomMiddle">X</div>
-          <div class="bottomRight">X</div>
+        <div id="winningMessage" class="winningMessage">
+          <h2 id="playerWon">Start the game</h2>
+          <button id="startButton" class="startButton" onclick="startGame()">
+            Start!
+          </button>
+          <div class="oponentSelect">
+            <label for="oponent" class="oponentLabel">Choose an oponent</label>
+            <select
+              onchange="selectedOponent()"
+              name="chooseOponent"
+              id="oponent"
+              class="oponentSelect"
+            >
+              <option value="computer">Computer</option>
+              <option value="playerTwo">Player 2</option>
+            </select>
+          </div>
         </div>
+        <div id="ticTacToeBox" class="ticTacToeBox">
+          <div id="topLeft" class="box topLeft"></div>
+          <div id="topMiddle" class="box topMiddle"></div>
+          <div id="topRight" class="box topRight"></div>
+          <div id="middleLeft" class="box middleLeft"></div>
+          <div id="middle" class="box middle"></div>
+          <div id="middleRight" class="box middleRight"></div>
+          <div id="bottomLeft" class="box bottomLeft"></div>
+          <div id="bottomMiddle" class="box bottomMiddle"></div>
+          <div id="bottomRight" class="box bottomRight"></div>
+        </div>
+        <div id="initStart" class="initStart"></div>
       </section>
       <!-- /Tic Tac Toe section -->
       <!-- Mario section -->
       <section id="mario" style="display: none">
         <h1>Mario</h1>
+        <canvas id="myCanvas"></canvas>
       </section>
       <!-- /Mario section -->
       <!-- Dar kazkas section -->
@@ -129,6 +152,5 @@
     <footer class="footer">
       <p class="footerText">&copy; 2024 Arminas Griesius</p>
     </footer>
-    <script src="script.js"></script>
   </body>
 </html>
