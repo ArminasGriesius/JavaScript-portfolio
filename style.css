@@ -293,6 +293,14 @@ h1 {
   display: grid;
   grid-template-columns: repeat(30, 16fr);
 }
+
+.canvas {
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* height: 100vh; */
+  margin-bottom: 80px;
+}
 /* /Mario */
 
 .footer {
