@@ -1,10 +1,15 @@
 const ground = new Image();
+ground.src = "/fotos/Brick.webp";
 const groundWidth = 50;
 const groundHeight = 50;
-ground.src = "/fotos/Brick.webp";
 ground.width = groundWidth;
 ground.height = groundHeight;
-console.log("ground.height ===", ground.height);
+
+const mario = new Image();
+mario.src = "/fotos/mario.webp";
+
+const marioBack = new Image();
+marioBack.src = "/fotos/marioBack.webp";
 
 const canvas = document.querySelector("canvas");
 
@@ -14,27 +19,52 @@ canvas.width = 1024;
 canvas.height = 576;
 
 const gravity = 0.5;
+let frames = 0;
+let movingDirection = "right";
+let isMovingRight = false;
+let isMovingLeft = false;
 
 class Player {
   constructor() {
     this.position = {
       x: 100,
-      y: 470,
+      y: 350,
     };
     this.velocity = {
       x: 0,
       y: 0,
     };
-    this.width = 30;
-    this.height = 30;
+    this.width = 50;
+    this.height = 100;
+    this.sprites = {
+      run: {
+        right: mario,
+        left: marioBack,
+      },
+    };
   }
   draw() {
-    ctx.fillStyle = "red";
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    const currentSprite =
+      movingDirection === "right"
+        ? this.sprites.run.right
+        : this.sprites.run.left;
+
+    ctx.drawImage(
+      currentSprite,
+      180 * Math.round(frames),
+      0,
+      150,
+      220,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
   }
 
   update() {
     this.draw();
+
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     if (this.position.y + this.height + this.velocity.y <= canvas.height) {
@@ -43,10 +73,17 @@ class Player {
   }
 }
 
+const player = new Player();
+
+const platformCount = 22;
+const airPlatformCount = 4;
+const pyramid = [];
+const platforms = [];
+
 class Platform {
-  constructor({ x, y, image }) {
+  constructor({ x, y }) {
     this.position = {
-      x: x,
+      x,
       y,
     };
     this.image = ground;
@@ -54,8 +91,6 @@ class Platform {
     this.height = groundHeight;
   }
   draw() {
-    // ctx.fillStyle = "blue";
-    // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     ctx.drawImage(
       ground,
       this.position.x,
@@ -66,21 +101,6 @@ class Platform {
   }
 }
 
-const image = new Image();
-
-const player = new Player();
-// const platform = new Platform();
-// const platforms = [
-//   new Platform({ x: -1, y: 530, image: ground }),
-//   new Platform({ x: groundWidth - 2, y: 530, image: ground }),
-// ];
-
-const platformCount = 22;
-const airPlatformCount = 4;
-const pyramidLevels = 6;
-const pyramid = [];
-const platforms = [];
-
 for (let i = -1; i < platformCount; i++) {
   const x = i * (groundWidth - 2);
   platforms.push(new Platform({ x, y: 530, image: ground }));
@@ -90,16 +110,16 @@ for (let i = 0; i < airPlatformCount; i++) {
   platforms.push(new Platform({ x, y: 200, image: ground }));
 }
 
-document.getElementById("pyramidInput").addEventListener("input", function () {
-  const inputValue = parseInt(this.value);
-  console.log("inputValue ===", inputValue);
+const pyramidInput = document.getElementById("pyramidInput");
+
+pyramidInput.addEventListener("input", () => {
+  const inputValue = parseInt(pyramidInput.value);
   makePyramid(inputValue);
 });
 
 function makePyramid(number) {
   if (number <= 6) {
     pyramid.length = 0;
-    console.log("pyramid.length ===", pyramid.length);
     for (let level = 0; level < number; level++) {
       for (let i = 0; i < number - level; i++) {
         const x1 = (12.5 + i) * (groundWidth - 1);
@@ -109,8 +129,7 @@ function makePyramid(number) {
         pyramid.push(new Platform({ x: x2, y, image: ground }));
       }
     }
-    console.log("pyramid.length ===", pyramid.length);
-  } else return console.log("per didelis sk");
+  } else return;
 }
 
 const keys = {
@@ -136,14 +155,21 @@ function animate() {
   });
   player.update();
 
-  if (keys.right.pressed) {
+  if (keys.right.pressed && player.position.x < 991) {
     player.velocity.x = 5;
-  } else if (keys.left.pressed) {
+    frames += 0.2;
+    if (frames > 2) {
+      frames = 0;
+    }
+  } else if (keys.left.pressed && player.position.x > 0) {
     player.velocity.x = -5;
+    frames += 0.2;
+    if (frames > 2) {
+      frames = 0;
+    }
   } else {
     player.velocity.x = 0;
   }
-  //platform colision detection
   platforms.forEach((platform) => {
     if (
       player.position.y + player.height <= platform.position.y &&
@@ -155,7 +181,6 @@ function animate() {
       player.velocity.y = 0;
     }
   });
-  //pyramid colision detection
   pyramid.forEach((block) => {
     if (
       player.position.y + player.height <= block.position.y &&
@@ -166,57 +191,84 @@ function animate() {
     ) {
       player.velocity.y = 0;
     }
+
+    if (
+      (player.position.x + player.width <= block.position.x &&
+        player.position.x + player.width + player.velocity.x >=
+          block.position.x &&
+        player.position.y + player.height >= block.position.y &&
+        player.position.y <= block.position.y + block.height) ||
+      (player.position.x >= block.position.x + block.width &&
+        player.position.x + player.velocity.x <=
+          block.position.x + block.width &&
+        player.position.y + player.height >= block.position.y &&
+        player.position.y <= block.position.y + block.height)
+    ) {
+      player.velocity.x = 0;
+    }
   });
 }
 animate();
 
-window.addEventListener("keydown", ({ keyCode }) => {
-  switch (keyCode) {
-    case 65:
-      console.log("left");
-      keys.left.pressed = true;
+let isJumping = false;
 
+let lastPressedKey = null;
+
+addEventListener("keydown", ({ key }) => {
+  switch (key) {
+    case "a":
+    case "A":
+      keys.left.pressed = true;
+      isMovingRight = false;
+      isMovingLeft = true;
+      if (!keys.right.pressed) {
+        movingDirection = "left";
+      }
+      lastPressedKey = key;
       break;
-    case 83:
-      //   player.velocity.y += 20;
-      console.log("player.velocity.y ===", player.velocity.y);
-      console.log("down");
-      break;
-    case 68:
-      console.log("right");
+
+    case "d":
+    case "D":
       keys.right.pressed = true;
+      isMovingRight = true;
+      isMovingLeft = false;
+      movingDirection = "right";
+      lastPressedKey = key;
       break;
-    case 87:
-      console.log("up");
-      player.velocity.y -= 5;
+    case "w":
+    case "W":
+      if (player.velocity.y == 0 && !isJumping) {
+        player.velocity.y -= 10;
+        isJumping = true;
+      }
+      lastPressedKey = key;
       break;
   }
 });
 
-window.addEventListener("keyup", ({ keyCode }) => {
-  switch (keyCode) {
-    case 65:
-      console.log("left");
+addEventListener("keyup", ({ key }) => {
+  switch (key) {
+    case "a":
+    case "A":
       keys.left.pressed = false;
+      frames = 2;
+      if (keys.right.pressed) {
+        movingDirection = "right";
+      }
+      break;
 
-      break;
-    case 83:
-      //   player.velocity.y += 5;
-      console.log("down");
-      break;
-    case 68:
-      console.log("right");
+    case "d":
+    case "D":
+      frames = 0;
       keys.right.pressed = false;
-
+      if (keys.left.pressed) {
+        movingDirection = "left";
+      }
       player.velocity.x = 0;
       break;
-    case 87:
-      console.log("up");
-      player.velocity.y -= 5;
+    case "w":
+    case "W":
+      isJumping = false;
       break;
   }
 });
-
-//padaryt, kad negaletu praeiti per blokus
-//padaryt kad negaletu uzeit uz ribu
-//padaryt zmogeliuka
