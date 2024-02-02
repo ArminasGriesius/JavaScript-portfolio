@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
-    <script src="mario.js" type="module" defer></script>
+    <!-- <script src="mario.js" type="module"></script> -->
 
     <title>JavaScript portfolio</title>
   </head>
@@ -19,19 +19,51 @@
         <a href="#" onclick="showSelection('mario')" class="headerItem"
           >Mario</a
         >
-        <a href="#" onclick="showSelection('darKazkas')" class="headerItem"
-          >Dar kazkas</a
-        >
       </nav>
     </header>
     <main class="middlePage">
-      <section id="init" style="display: block" class="">
+      <section id="init" style="display: block" class="initSection">
         <!-- Init section -->
-        <h1>Welcome to my JS portfolio</h1>
+        <h1 class="initTitle">Welcome to my JS portfolio</h1>
+        <div class="initSubjects">
+          <div class="aboutSubject">
+            <h3>Harry Potter quiz</h3>
+            <p class="aboutSubjectText">
+              Harry Potter-themed quiz application with questions, answer
+              options, result messages, audio feedback, DOM manipulation, and
+              key features like event handling, quiz flow control, CSS styling,
+              and object-oriented programming. It showcases asynchronous
+              JavaScript, dynamic DOM manipulation, event delegation, and audio
+              preloading for an engaging quiz experience.
+            </p>
+          </div>
+          <div class="aboutSubject">
+            <h3>Tic Tac Toe</h3>
+            <p class="aboutSubjectText">
+              Tic Tac Toe game with the option to play against another player or
+              the computer. The computer opponent places O randomly and lacks
+              advanced intelligence. Features include sound effects, visually
+              appealing CSS design, and logic for checking winning combinations.
+            </p>
+          </div>
+          <div class="aboutSubject">
+            <h3>Mario from Wish</h3>
+            <p class="aboutSubjectText">
+              This JavaScript code introduces a Mario-themed game implemented on
+              an HTML canvas. The player is controlled by keyboard keys,
+              featuring animations for running and jumping. The canvas rendering
+              showcases Mario, various platforms, and a pyramid-shaped obstacle.
+              Users can generate a pyramid with a customizable height,
+              resembling a specific pattern. The "Player" class oversees Mario's
+              actions, including velocity, animation, and collision detection
+              with platforms and the pyramid.
+            </p>
+          </div>
+        </div>
       </section>
       <!-- /Init section -->
       <!-- Quiz section -->
-      <section id="quiz" style="display: none" class="">
+      <section id="quiz" style="display: none" class="quizPage">
         <h1>Harry Potter Quiz</h1>
         <p id="quizHeadlineText">
           Answer 10 questions to determine wether you're a TRUE Harry Potter fan
@@ -103,7 +135,7 @@
       </section>
       <!-- /Quiz section -->
       <!-- Tic Tac Toe section -->
-      <section id="ticTacToe" style="display: none">
+      <section id="ticTacToe" style="display: none" class="tictactoeSection">
         <h1>Tic Tac Toe</h1>
         <div id="winningMessage" class="winningMessage">
           <h2 id="playerWon">Start the game</h2>
@@ -134,21 +166,22 @@
           <div id="bottomMiddle" class="box bottomMiddle"></div>
           <div id="bottomRight" class="box bottomRight"></div>
         </div>
-        <div id="initStart" class="initStart"></div>
       </section>
       <!-- /Tic Tac Toe section -->
       <!-- Mario section -->
       <section id="mario" style="display: none">
         <h1>Mario</h1>
-        <input type="number" id="pyramidInput" />
+        <p>Select height of the pyramid</p>
+        <button class="marioBtn" onclick="makePyramid(0)">0</button>
+        <button class="marioBtn" onclick="makePyramid(1)">1</button>
+        <button class="marioBtn" onclick="makePyramid(2)">2</button>
+        <button class="marioBtn" onclick="makePyramid(3)">3</button>
+        <button class="marioBtn" onclick="makePyramid(4)">4</button>
+        <button class="marioBtn" onclick="makePyramid(5)">5</button>
+        <button class="marioBtn" onclick="makePyramid(6)">6</button>
         <canvas id="myCanvas" class="canvas"></canvas>
       </section>
       <!-- /Mario section -->
-      <!-- Dar kazkas section -->
-      <section id="darKazkas" style="display: none">
-        <h1>Dar kazkas</h1>
-      </section>
-      <!-- /Dar kazkas section -->
     </main>
     <footer class="footer">
       <p class="footerText">&copy; 2024 Arminas Griesius</p>
