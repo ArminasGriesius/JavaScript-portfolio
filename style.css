@@ -5,10 +5,12 @@ body {
 a,
 p,
 h2,
+h3,
 h1 {
   color: white;
 }
 
+/* Header */
 .headerItems {
   display: flex;
   flex-direction: row;
@@ -34,11 +36,54 @@ h1 {
   margin: 0 auto;
   text-align: center;
 }
+/* /Header */
+
+/* Init */
+
+.initSection {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin: 80px auto;
+}
+
+.initTitle {
+  margin-bottom: 80px;
+}
+
+.initSubjects {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+}
+
+.aboutSubject {
+  /* width: 80%; */
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: rgba(150, 200, 200, 0.2);
+  height: 400px;
+}
+
+.aboutSubjectText {
+  font-size: 18px;
+}
+
+/* /Init */
 
 /* quiz */
 
+.quizPage {
+}
+
 .quizBothSides {
+  width: 80%;
+  margin: 0 auto;
   margin-bottom: 100px;
+  background-image: url("https://www.iwantwallpaper.co.uk/images/harry-potter-mischief-management-parchment-themed-glow-in-the-dark-wallpaper-p6354-17836_image.jpg");
+  padding: 30px;
+  border-radius: 15px;
 }
 
 .initQuiz {
@@ -122,9 +167,7 @@ h1 {
 /* Tic Tac Toe */
 
 .ticTacToeBox {
-  /* width: 100vw; */
-  /* height: 100vh; */
-  margin: 50px 30px;
+  margin: 100px 30px;
   display: grid;
   justify-content: center;
   align-content: center;
@@ -135,7 +178,6 @@ h1 {
 }
 
 .initStart {
-  /* display: grid; */
   grid-template-columns: repeat(1, 1fr);
   margin-bottom: 80px;
 }
@@ -295,22 +337,21 @@ h1 {
 }
 
 .canvas {
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* height: 100vh; */
   margin-bottom: 80px;
+}
+
+.marioBtn {
+  margin: 10px;
+  padding: 15px 20px;
+  background-color: brown;
+  color: white;
 }
 /* /Mario */
 
 .footer {
-  /* padding: 10px; */
   border-top: 1px solid white;
   text-align: center;
   color: white;
-  /* position: fixed; */
-  /* bottom: 0; */
-  /* width: 100%; */
 }
 
 @media screen and (min-width: 767px) {
@@ -332,16 +373,6 @@ h1 {
 @media screen and (min-width: 1023px) {
   h1 {
     margin-top: 50px;
-  }
-  .headerItems {
-  }
-
-  .headerItem {
-  }
-  .headerItem:hover {
-  }
-
-  .middlePage {
   }
 
   /* quiz */
@@ -373,9 +404,6 @@ h1 {
 
   .answerOption {
     font-size: 20px;
-  }
-
-  .takeQuizButton {
   }
 
   /* /quiz */
