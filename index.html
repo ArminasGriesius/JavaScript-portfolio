@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fjalla+One&family=Inter:wght@300;400;500;600;700&family=Open+Sans&family=Passion+One&family=Permanent+Marker&display=swap");
+    </style>
     <!-- <script src="mario.js" type="module"></script> -->
 
     <title>JavaScript portfolio</title>
@@ -18,6 +21,9 @@
         >
         <a href="#" onclick="showSelection('mario')" class="headerItem"
           >Mario</a
+        >
+        <a href="#" onclick="showSelection('jokes')" class="headerItem"
+          >Jokes</a
         >
       </nav>
     </header>
@@ -57,6 +63,16 @@
               resembling a specific pattern. The "Player" class oversees Mario's
               actions, including velocity, animation, and collision detection
               with platforms and the pyramid.
+            </p>
+          </div>
+          <div class="aboutSubject">
+            <h3>Jokes</h3>
+            <p class="aboutSubjectText">
+              The code employs the generateJoke function to retrieve Chuck
+              Norris or dad jokes from APIs. It dynamically modifies the content
+              of the "jokeText" HTML element, responding to the selected joke
+              type. This process involves asynchronous operations, DOM
+              manipulation, and API requests within the code.
             </p>
           </div>
         </div>
@@ -182,6 +198,28 @@
         <canvas id="myCanvas" class="canvas"></canvas>
       </section>
       <!-- /Mario section -->
+      <!-- Jokes section -->
+      <section id="jokes" style="display: none">
+        <h1>Jokes</h1>
+        <p>
+          Select between Chuck Norris and Dad jokes and be prepared to laugh!!!
+        </p>
+        <div class="jokeButtons">
+          <button class="jokeButton" onclick="generateJoke('chuck')">
+            Chuck Norris Joke
+          </button>
+          <button class="jokeButton" onclick="generateJoke('dad')">
+            Dad Joke
+          </button>
+        </div>
+        <div class="jokeBlock">
+          <h2>"</h2>
+          <h4 id="jokeText" class="jokeText">
+            Select between Chuck Norris and Dad and be prepared to laugh!!!
+          </h4>
+        </div>
+      </section>
+      <!-- /Jokes section -->
     </main>
     <footer class="footer">
       <p class="footerText">&copy; 2024 Arminas Griesius</p>
