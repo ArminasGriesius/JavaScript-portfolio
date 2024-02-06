@@ -22,7 +22,6 @@ h1 {
 }
 
 .headerItem {
-  /* color: black; */
   transition: all 0.3s;
   text-decoration: none;
 }
@@ -63,7 +62,6 @@ h1 {
   padding: 10px;
   border-radius: 15px;
   background-color: rgba(150, 200, 200, 0.2);
-  /* height: 400px; */
 }
 
 .aboutSubjectText {
@@ -73,9 +71,6 @@ h1 {
 /* /Init */
 
 /* quiz */
-
-.quizPage {
-}
 
 .quizBothSides {
   width: 80%;
@@ -344,6 +339,7 @@ h1 {
   color: white;
 }
 /* /Mario */
+
 /* Jokes */
 .jokeButtons {
   display: flex;
