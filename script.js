@@ -521,7 +521,7 @@ class Player {
 
 const player = new Player();
 
-const platformCount = 22;
+const platformCount = 220;
 const airPlatformCount = 4;
 const pyramid = [];
 const platforms = [];
@@ -541,8 +541,8 @@ class Platform {
       ground,
       this.position.x,
       this.position.y,
-      groundWidth,
-      groundHeight
+      this.width,
+      this.height
     );
   }
 }
@@ -554,6 +554,9 @@ for (let i = -1; i < platformCount; i++) {
 for (let i = 0; i < airPlatformCount; i++) {
   const x = (5 + i) * (groundWidth - 2);
   platforms.push(new Platform({ x, y: 200, image: ground }));
+  platforms.push(
+    new Platform({ x: (30 + i) * (groundWidth - 2), y: 350, image: ground })
+  );
 }
 
 function makePyramid(number) {
@@ -584,6 +587,8 @@ const keys = {
 
 player.update();
 
+let marioRunningLimit = false;
+
 function animate() {
   requestAnimationFrame(animate);
   ctx.fillStyle = "lightblue";
@@ -596,13 +601,26 @@ function animate() {
   });
   player.update();
 
-  if (keys.right.pressed && player.position.x < 985) {
-    player.velocity.x = 5;
+  if (player.position.x === 405) {
+    marioRunningLimit = true;
+  } else if (!keys.right.pressed) {
+    marioRunningLimit = false;
+  }
+
+  if (keys.right.pressed) {
     frames += 0.2;
     if (frames > 2) {
       frames = 0;
     }
-  } else if (keys.left.pressed && player.position.x > 0) {
+  }
+
+  if (keys.right.pressed && player.position.x <= 400) {
+    player.velocity.x = 5;
+    // frames += 0.2;
+    // if (frames > 2) {
+    //   frames = 0;
+    // }
+  } else if (keys.left.pressed && player.position.x > 50) {
     player.velocity.x = -5;
     frames += 0.2;
     if (frames > 2) {
@@ -621,6 +639,9 @@ function animate() {
     ) {
       player.velocity.y = 0;
     }
+    if (keys.right.pressed && marioRunningLimit) {
+      platform.position.x -= 5;
+    }
   });
   pyramid.forEach((block) => {
     if (
@@ -631,6 +652,12 @@ function animate() {
       player.position.x <= block.position.x + block.width
     ) {
       player.velocity.y = 0;
+    }
+    if (keys.right.pressed && marioRunningLimit) {
+      block.position.x -= 5;
+    }
+    if (keys.left.pressed && marioRunningLimit) {
+      block.position.x -= 5;
     }
 
     if (
