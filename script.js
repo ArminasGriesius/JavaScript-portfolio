@@ -444,6 +444,8 @@ function printComputer() {
 let marioTheme = new Audio("/files/marioTheme.mp3");
 let marioJump = new Audio("/files/marioJump.mp3");
 let addBlock = new Audio("/files/addBlock.mp3");
+let marioDeath = new Audio("/files/marioDeath.mp3");
+let marioWin = new Audio("/files/marioWin.mp3");
 
 const ground = new Image();
 ground.src = "/fotos/Brick.webp";
@@ -458,6 +460,12 @@ mario.src = "/fotos/mario.webp";
 const marioBack = new Image();
 marioBack.src = "/fotos/marioBack.webp";
 
+const creatureImage = new Image();
+creatureImage.src = "/fotos/creature.png";
+
+const flag = new Image();
+flag.src = "/fotos/flag.png";
+
 const canvas = document.querySelector("canvas");
 
 const ctx = canvas.getContext("2d");
@@ -467,9 +475,24 @@ canvas.height = 576;
 
 const gravity = 0.8;
 let frames = 0;
+let creatureFrames = 0;
 let movingDirection = "right";
+let creatureMovingDirection = "left";
 let isMovingRight = false;
 let isMovingLeft = false;
+let colision = false;
+
+function resetElements() {
+  marioTheme.currentTime = 0;
+  setTimeout(() => {
+    marioTheme.play();
+  }, 1500);
+  platforms.length = 0;
+  pyramid.length = 0;
+
+  drawPlatforms();
+}
+
 class Player {
   constructor() {
     this.position = {
@@ -515,16 +538,73 @@ class Player {
     this.position.y += this.velocity.y;
     if (this.position.y + this.height + this.velocity.y <= canvas.height) {
       this.velocity.y += gravity;
-    } else this.velocity.y = 0;
+    } else if (this.position.y > canvas.height) {
+      marioDeath.play();
+      marioTheme.pause();
+      initMario();
+    }
+  }
+}
+class Creature {
+  constructor() {
+    this.position = {
+      x: 3900,
+      y: 479,
+    };
+    this.velocity = {
+      x: 0,
+      y: 0,
+    };
+    this.width = 40;
+    this.height = 50;
+    this.sprites = creatureImage;
+  }
+  draw() {
+    ctx.drawImage(
+      this.sprites,
+      30 * Math.round(creatureFrames),
+      0,
+      16,
+      20,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+  }
+
+  update() {
+    this.draw();
+
+    if (creatureMovingDirection === "left") {
+      this.position.x -= 2;
+    } else if (creatureMovingDirection === "right") {
+      this.position.x += 2;
+    }
+    creatureFrames += 0.05;
+    if (creatureFrames > 1) {
+      creatureFrames = 0;
+    }
   }
 }
 
-const player = new Player();
+let player = new Player();
+let creature = new Creature();
 
-const platformCount = 220;
+function initMario() {
+  resetElements();
+
+  player.position.x = 100;
+  player.position.y = 350;
+  creature.position.x = 3900;
+  finishFlag.position.x = 4000;
+}
+
+const platformCount = 50;
 const airPlatformCount = 4;
 const pyramid = [];
 const platforms = [];
+// const marioFlag = [];
 
 class Platform {
   constructor({ x, y }) {
@@ -547,19 +627,64 @@ class Platform {
   }
 }
 
-for (let i = -1; i < platformCount; i++) {
-  const x = i * (groundWidth - 2);
-  platforms.push(new Platform({ x, y: 530, image: ground }));
+class Flag {
+  constructor() {
+    this.position = {
+      x: 4000,
+      y: 230,
+    };
+    this.image = flag;
+    this.width = 50;
+    this.height = 300;
+  }
+  draw() {
+    ctx.drawImage(
+      flag,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+  }
+  update() {
+    this.position.x = finishFlag.position.x;
+    this.position.y = finishFlag.position.y;
+    this.draw();
+  }
 }
-for (let i = 0; i < airPlatformCount; i++) {
-  const x = (5 + i) * (groundWidth - 2);
-  platforms.push(new Platform({ x, y: 200, image: ground }));
-  platforms.push(
-    new Platform({ x: (30 + i) * (groundWidth - 2), y: 350, image: ground })
-  );
+let finishFlag = new Flag();
+
+function drawPlatforms() {
+  for (let i = -1; i < platformCount; i++) {
+    const x = i * (groundWidth - 2);
+    platforms.push(new Platform({ x, y: 530, image: ground }));
+    platforms.push(
+      new Platform({ x: (i + 55) * (groundWidth - 2), y: 530, image: ground })
+    );
+  }
+  for (let i = 0; i < airPlatformCount; i++) {
+    const x = (5 + i) * (groundWidth - 2);
+    platforms.push(new Platform({ x, y: 200, image: ground }));
+    platforms.push(
+      new Platform({ x: (30 + i) * (groundWidth - 2), y: 350, image: ground })
+    );
+
+    for (let level = 0; level < 2; level++) {
+      for (let i = 0; i < 2 - level; i++) {
+        const x1 = (52.9 + i) * (groundWidth - 1);
+        const x2 = (48 - i) * (groundWidth - 1);
+        const y = 482 - level * 48;
+        platforms.push(new Platform({ x: x1, y, image: ground }));
+        platforms.push(new Platform({ x: 1300, y, image: ground }));
+        platforms.push(new Platform({ x: x2, y, image: ground }));
+      }
+    }
+  }
 }
+drawPlatforms();
 
 function makePyramid(number) {
+  initMario();
   if (number <= 6) {
     pyramid.length = 0;
     for (let level = 0; level < number; level++) {
@@ -587,7 +712,8 @@ const keys = {
 
 player.update();
 
-let marioRunningLimit = false;
+let rightRunLimit = false;
+let leftRunLimit = false;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -599,12 +725,20 @@ function animate() {
   pyramid.forEach((block) => {
     block.draw();
   });
+
   player.update();
+  creature.update();
+  finishFlag.update();
 
   if (player.position.x === 405) {
-    marioRunningLimit = true;
+    rightRunLimit = true;
   } else if (!keys.right.pressed) {
-    marioRunningLimit = false;
+    rightRunLimit = false;
+  }
+  if (player.position.x === 50) {
+    leftRunLimit = true;
+  } else if (!keys.left.pressed) {
+    leftRunLimit = false;
   }
 
   if (keys.right.pressed) {
@@ -613,22 +747,62 @@ function animate() {
       frames = 0;
     }
   }
-
-  if (keys.right.pressed && player.position.x <= 400) {
-    player.velocity.x = 5;
-    // frames += 0.2;
-    // if (frames > 2) {
-    //   frames = 0;
-    // }
-  } else if (keys.left.pressed && player.position.x > 50) {
-    player.velocity.x = -5;
+  if (keys.left.pressed) {
     frames += 0.2;
     if (frames > 2) {
       frames = 0;
     }
+  }
+
+  if (keys.right.pressed && player.position.x <= 400) {
+    player.velocity.x = 5;
+  } else if (keys.left.pressed && player.position.x > 50) {
+    player.velocity.x = -5;
   } else {
     player.velocity.x = 0;
   }
+  if (
+    player.position.y + player.height <= finishFlag.position.y &&
+    player.position.y + player.height + player.velocity.y >=
+      finishFlag.position.y &&
+    player.position.x + player.width >= finishFlag.position.x &&
+    player.position.x <= finishFlag.position.x + finishFlag.width
+  ) {
+    player.velocity.y = 0;
+  }
+  if (player.position.x === finishFlag.position.x - 10) {
+    console.log("win");
+    marioWin.play();
+    marioTheme.pause();
+    initMario();
+    rightRunLimit = false;
+  }
+
+  //creature
+  if (creature.position.x + creature.width == finishFlag.position.x) {
+    console.log("iviko kazkas");
+    creatureMovingDirection = "left";
+  }
+
+  if (keys.right.pressed && rightRunLimit) {
+    finishFlag.position.x -= 5;
+    creature.position.x -= 5;
+  }
+  if (keys.left.pressed && leftRunLimit) {
+    finishFlag.position.x += 5;
+    creature.position.x += 5;
+  }
+
+  //mario atsimusimas i creature
+  if (
+    player.position.x <= creature.position.x + creature.width - 20 &&
+    player.position.x + player.width - 20 >= creature.position.x &&
+    player.position.y + player.height >= creature.position.y
+  ) {
+    initMario();
+    marioDeath.play();
+  }
+
   platforms.forEach((platform) => {
     if (
       player.position.y + player.height <= platform.position.y &&
@@ -639,11 +813,50 @@ function animate() {
     ) {
       player.velocity.y = 0;
     }
-    if (keys.right.pressed && marioRunningLimit) {
+    //atsimusa i platformos apacia
+    if (
+      player.position.y >= platform.position.y + platform.height &&
+      player.position.y + player.velocity.y <=
+        platform.position.y + platform.height &&
+      player.position.x + player.width >= platform.position.x &&
+      player.position.x <= platform.position.x + platform.width
+    ) {
+      player.position.y = platform.position.y + platform.height;
+      player.velocity.y = 0;
+    }
+
+    if (keys.right.pressed && rightRunLimit) {
       platform.position.x -= 5;
+    }
+    if (keys.left.pressed && leftRunLimit) {
+      platform.position.x += 5;
+    }
+    if (
+      (player.position.x + player.width <= platform.position.x &&
+        player.position.x + player.width + player.velocity.x >=
+          platform.position.x &&
+        player.position.y + player.height >= platform.position.y &&
+        player.position.y <= platform.position.y + platform.height) ||
+      (player.position.x >= platform.position.x + platform.width &&
+        player.position.x + player.velocity.x <=
+          platform.position.x + platform.width &&
+        player.position.y + player.height >= platform.position.y &&
+        player.position.y <= platform.position.y + platform.height)
+    ) {
+      player.velocity.x = 0;
+    }
+    if (
+      creature.position.x + creature.velocity.x <=
+        platform.position.x + platform.width + platform.width &&
+      creature.position.y >= platform.position.y
+    ) {
+      creatureMovingDirection = "right";
+      console.log("ar kazkas vyksta?");
     }
   });
   pyramid.forEach((block) => {
+    console.log("colision ===", colision);
+    //uzsokimas ant virsaus
     if (
       player.position.y + player.height <= block.position.y &&
       player.position.y + player.height + player.velocity.y >=
@@ -653,13 +866,21 @@ function animate() {
     ) {
       player.velocity.y = 0;
     }
-    if (keys.right.pressed && marioRunningLimit) {
+    //kaip padaryt, kad blokai esantys toliau taip pat sustotu??????????
+    if (player.position.x >= block.position.x - block.width) {
+      if (!colision) {
+        console.log("colision ===", colision);
+        colision = true;
+      }
+    }
+    console.log("colision ===", colision);
+    if (keys.right.pressed && rightRunLimit && !colision) {
       block.position.x -= 5;
     }
-    if (keys.left.pressed && marioRunningLimit) {
-      block.position.x -= 5;
+    if (keys.left.pressed && leftRunLimit) {
+      block.position.x += 5;
     }
-
+    //atsimusimas i sonus
     if (
       (player.position.x + player.width <= block.position.x &&
         player.position.x + player.width + player.velocity.x >=
@@ -673,6 +894,8 @@ function animate() {
         player.position.y <= block.position.y + block.height)
     ) {
       player.velocity.x = 0;
+      // block.position.x = -10;
+      // console.log("kazkas");
     }
   });
 }
